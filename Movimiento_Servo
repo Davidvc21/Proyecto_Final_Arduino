@@ -1,3 +1,4 @@
+//Librería para el servo
 #include <Servo.h>
 
 //variable para usar el servo

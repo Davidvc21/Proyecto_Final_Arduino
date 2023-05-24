@@ -1,0 +1,33 @@
+//Modulo blueetooth
+// Usamos el pin 12 para el LED
+int ledPin = 12; 
+
+// Variable para que reciba el dato del bluetooth
+int state = 0; 
+ 
+void setup() {
+  //Declaramos pin del LED como Salida
+    pinMode(ledPin, OUTPUT);  
+    digitalWrite(ledPin, LOW);
+    Serial.begin(9600);
+}
+ 
+void loop() {
+ //si el modulo manda un dato, se guarda en la variable "state"
+  if(Serial.available() > 0){
+       state = Serial.read(); 
+  }
+  
+ // Si el estado es 0 entonces ponemos el LED Apagado “OFF”
+ if (state == '0') {
+    digitalWrite(ledPin, LOW);
+    Serial.println("LED: off");
+ }
+ 
+ // De lo contrario si el estado es 1 entonces ponemos el LED Encendido “ON”
+ else
+ if (state == '1') {
+     digitalWrite(ledPin, HIGH);
+     Serial.println("LED: on");
+ }
+}

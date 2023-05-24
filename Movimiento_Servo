@@ -1,0 +1,28 @@
+#include <Servo.h>
+
+//variable para usar el servo
+Servo myservo; 
+
+void setup(){
+  
+  
+  //indica el puerto o pin a utilizar
+  myservo.attach(9);
+}
+
+void loop(){
+  
+ //Secuencia de movimiento
+  
+ //Posición 0º
+  myservo.write(0);
+  delay(1000);
+  
+  // Posición  90º
+  myservo.write(90);
+  delay(1000);
+  
+  // Posición 180º
+  myservo.write(180);
+  delay(1000);
+}

@@ -1,0 +1,48 @@
+// Importamos la librería para el control de servos
+#include <Servo.h>
+
+// Definimos los pines del botón y del servo
+int boton1 = 2;
+int boton2 = 3;
+int servoPin = 9;
+int angulo = 0;
+int estadoboton1 = 0;
+int estadoboton2 = 0;
+
+// Creamos un objeto de la clase Servo
+Servo servomotor;
+
+void setup() {
+  // Configuramos los pines de los botones como entradas
+  pinMode(boton1, INPUT);
+  pinMode(boton2, INPUT);
+
+  // Configuramos el pin del servo como salida
+  servomotor.attach(servoPin);
+
+  // Movemos el servo a su posición inicial (0 grados)
+  servomotor.write(angulo);
+}
+
+void loop() {
+  estadoboton1 = digitalRead(boton1);
+  estadoboton2 = digitalRead(boton2);
+
+  // Si se presiona el botón 1, movemos el servo a 90 grados
+  if (estadoboton1 == HIGH) {
+    (angulo>=90);
+      angulo=90;
+    }
+  
+
+  // Si se presiona el botón 2, movemos el servo a 0 grados
+  if (estadoboton2 == HIGH) {
+    (angulo<=0);
+      angulo=0;
+    }
+  
+
+  // Movemos el servo a la posición correspondiente
+  servomotor.write(angulo);
+  delay(100);
+}

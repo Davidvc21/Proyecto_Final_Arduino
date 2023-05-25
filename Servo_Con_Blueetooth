@@ -1,0 +1,39 @@
+// Libreria para modulo bluetooth, puertos TX, RX
+#include <SoftwareSerial.h> 
+
+  //Libreria del servo
+  
+  #include <Servo.h> 
+
+  //Variable para usar el servo
+Servo myservo; 
+
+  //Declaramos los pines TX y RX
+int bluetoothTx = 10; 
+int bluetoothRx = 11; 
+
+SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
+
+void setup()
+{
+  // Declaramos el servo al pin 9
+  myservo.attach(9); 
+  //Setup usb serial connection to computer
+  Serial.begin(9600);
+
+  bluetooth.begin(9600);
+}
+
+void loop()
+{
+  //Leer el dato enviado por el bluetooth y recivirlo
+  if(bluetooth.available()> 0 ) // Se recibe el dato del bluetooth
+  {
+    // Declaramos la variable servopos y que guarde el dato recibido
+    int servopos = bluetooth.read(); 
+    //Guarda el dato recibido del bluetooth
+    Serial.println(servopos);
+    //Le decimos que mueva el servo al angulo recibido de la app 
+    myservo.write(servopos);
+  }
+}

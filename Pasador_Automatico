@@ -1,0 +1,306 @@
+//Union de algortmos anteriores
+
+//Librerias del modulo de la pantalla LCD
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+//configuramos la pantalla LCD
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+#include <Servo.h>
+#include <Keypad.h>
+
+//Variables
+int mot_min = 90;   //Angulo para el servo  
+int mot_max = 0; //Angulo para el servo 
+int character = 0;
+int activated =0;
+char Str[16] = {' ', ' ', ' ', ' ', ' ', ' ', '-', '*', '*', '*', ' ', ' ', ' ', ' ', ' ', ' '};  
+
+//Se declaran los pins
+Servo myservo;
+int buzzer=11;     //pin para el zumbador
+
+
+// Variable para que reciba el dato del bluetooth
+int state = 0; 
+
+//Configuramos el teclado matricial
+const byte ROWS = 4; //4 filas
+const byte COLS = 4; //4 columnas
+//define the cymbols on the buttons of the keypads
+char hexaKeys[ROWS][COLS] = {
+  {'1','4','7','*'},
+  {'2','5','8','0'},
+  {'3','6','9','#'},
+  {'A','B','C','D'}
+};
+byte rowPins[ROWS] = {5, 4, 3, 2}; //conectamos las filas del teclado con los pines
+byte colPins[COLS] = {9, 8, 7, 6}; //conectamos las columnas con los pines
+
+//Se declara la configuracion del teclado y se indica cada fila, columna
+Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
+
+
+
+void setup() {
+ //indica el puerto o pin a utilizar
+  myservo.attach(10);
+  Serial.begin(9600);
+
+
+   pinMode(buzzer,OUTPUT); 
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+    lcd.setCursor(3,0);
+      lcd.print("Contrase");
+              char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a"); 
+      lcd.setCursor(0,1);
+  lcd.print("      -***     ");
+}
+
+void loop() {
+//si el modulo manda un dato, se guarda en variable "state"
+  if(Serial.available() > 0){
+       state = Serial.read(); 
+           
+  }
+    switch( state)
+  {
+  case 'a':
+   //Secuencia de movimiento
+  
+ //Posición 0º
+  myservo.write(0);
+
+ lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Modulo Bluetooth");
+      activated = 2;
+      analogWrite(buzzer,250);
+      delay(100);
+      analogWrite(buzzer,LOW);
+      delay(50);
+      analogWrite(buzzer,150);
+      delay(150);
+      analogWrite(buzzer,LOW);
+      
+      lcd.clear();    
+      lcd.setCursor(1,0);
+      lcd.print("BIENVENIDOS");
+      delay(500);
+      lcd.setCursor(6,1);
+      lcd.print("Adelante!!");
+      delay(1000);
+
+      lcd.clear();    
+      lcd.setCursor(1,0);
+      lcd.print("PUERTA ABIERTA");
+      lcd.setCursor(0,1);
+      lcd.print("Porfavor cerrar!");
+  
+   break;
+    case 'c':
+    // Posición  90º
+  myservo.write(90);
+
+   lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Modulo Bluetooth");
+      activated = 2;
+      analogWrite(buzzer,250);
+      delay(100);
+      analogWrite(buzzer,LOW);
+      delay(50);
+      analogWrite(buzzer,150);
+      delay(150);
+      analogWrite(buzzer,LOW);
+      
+lcd.clear();
+    lcd.setCursor(0,0);
+      lcd.print("Cerrado! C Para"); 
+    lcd.setCursor(0,1);
+      lcd.print("Poner contrase");
+      char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");
+  }
+
+
+// Instrucciones de Keypad Abierto y cerrado  
+(Serial.available() < 1);{
+       state = Serial.read();
+  char customKey = customKeypad.getKey(); //esta funcion lee la tecla presionada
+  
+  if (customKey){
+
+    if (character ==0)
+    {  
+    Serial.println(customKey);
+    Str[6]= customKey;   
+    lcd.clear();
+    lcd.setCursor(3,0);
+    lcd.print("Contrase");
+            char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");
+    lcd.setCursor(0,1);
+    lcd.print(Str);
+   
+    }
+
+    if (character ==1)
+    {  
+    Serial.println(customKey);
+    Str[7]= customKey;   
+    lcd.clear();
+    lcd.setCursor(3,0);
+      lcd.print("Contrase");
+              char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a"); 
+    lcd.setCursor(0,1);
+    lcd.print(Str);
+   
+    }
+
+    if (character ==2)
+    {  
+    Serial.println(customKey);
+    Str[8]= customKey;   
+    lcd.clear();
+    lcd.setCursor(3,0);
+    lcd.print("Contrase");
+            char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");   
+    lcd.setCursor(0,1);
+    lcd.print(Str);
+   
+    }
+
+    if (character ==3)
+    {  
+    Serial.println(customKey);
+    Str[9]= customKey;   
+    lcd.clear();
+    lcd.setCursor(3,0);
+      lcd.print("Contrase");
+              char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");    
+    lcd.setCursor(0,1);
+    lcd.print(Str);
+   
+    }
+
+    if (character ==4)
+    {  
+    Serial.println(customKey);
+    Str[10]= customKey;
+    activated=1;
+   
+    }
+    character=character+1;
+  }
+
+  if (activated == 1)
+    {
+//Aca se pone la contraseña 
+Change each of Str[6], Str[7], Str[8], Str[9]*/
+
+    if(Str[10]='A' && character==5 && Str[6]=='2' && Str[7]=='5' && Str[8]=='2' && Str[9]=='8' )
+    {
+      myservo.write(mot_max);
+      lcd.clear();
+      lcd.setCursor(4,0);
+      lcd.print("CORRECTO");
+      activated = 2;
+      analogWrite(buzzer,250);
+      delay(100);
+      analogWrite(buzzer,LOW);
+      delay(50);
+      analogWrite(buzzer,150);
+      delay(150);
+      analogWrite(buzzer,LOW);
+      
+      lcd.clear();    
+      lcd.setCursor(1,0);
+      lcd.print("BIENVENIDOS");
+      delay(500);
+      lcd.setCursor(6,1);
+      lcd.print("Adelante!!");
+      delay(1000);
+
+      lcd.clear();    
+      lcd.setCursor(1,0);
+      lcd.print("PUERTA ABIERTA");
+      lcd.setCursor(3,1);
+      lcd.print("C ");
+       char myChar = 0x7E;
+    lcd.print(myChar);
+    lcd.print(" Cerrar");
+      
+    }
+    else
+    {
+      lcd.clear();    
+      lcd.setCursor(3,0);
+        lcd.print("Contrase");
+              char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");
+      lcd.setCursor(3,1);
+      lcd.print("Incorrecta");
+      analogWrite(buzzer,150);
+      delay(100);
+      analogWrite(buzzer,LOW);
+      delay(50);
+      analogWrite(buzzer,250);
+      delay(1000);
+      analogWrite(buzzer,LOW);
+      character=0;
+      Str[6]= '-';
+      Str[7]= '*'; 
+      Str[8]= '*'; 
+      Str[9]= '*';
+      Str[10]= ' ';
+      activated = 0;
+      lcd.clear();    
+      lcd.setCursor(3,0);
+      lcd.print("Contrase");
+         
+    lcd.print(myChar);
+    lcd.print("a");
+      lcd.setCursor(0,1);
+      lcd.print(Str);   
+    }
+  }
+  if (activated == 2)
+    {
+    if(customKey == 'C' )
+    {
+      myservo.write(mot_min);
+      activated = 0;
+      character=0;
+      Str[6]= '-';
+      Str[7]= '*'; 
+      Str[8]= '*'; 
+      Str[9]= '*';
+      Str[10]= ' ';   
+      lcd.clear();
+      lcd.setCursor(3,0);
+        lcd.print("Contrase");
+              char myChar = 0xEE;
+    lcd.print(myChar);
+    lcd.print("a");    
+      lcd.setCursor(0,1);
+      lcd.print(Str);
+     
+    }
+  }  
+}
+}
